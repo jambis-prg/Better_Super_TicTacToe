@@ -33,7 +33,7 @@ class TicTacToe
     public:
         TicTacToe();
 
-        void set_players_name(const std::pair<std::string, std::string> &players);
+        void set_players_name(const std::array<std::string, 2> &players);
         
         player_turn_text get_text() const;
         int8_t get_next_grid() const;

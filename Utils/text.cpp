@@ -112,36 +112,24 @@ bool text_box::check_box_selected(sf::RenderWindow &window)
     return false;
 }
 
-/* Used for the backwards key */
-void text_box::delete_last_char()
-{
-    std::string t = m_text_string.str();
-    t.pop_back();
-
-    m_text_string.str("");
-    m_text_string << t;
-
-    m_text.setString(m_text_string.str());
-}
-
 /* Will add or remove text from the screen */
 void text_box::input_handler(int typed_char)
 {
     if (typed_char == BACKSPACE)
     {
-        if (!m_text_string.str().empty())
-            delete_last_char();
+        if (!m_text_string.empty())
+            m_text_string.pop_back();
     }
     else if (typed_char == TAB)
     {
-        m_text_string << "    ";
+        m_text_string += "    ";
     }
     else
     {
-        m_text_string << static_cast<char> (typed_char);
+        m_text_string += static_cast<char> (typed_char);
     }
     
-    m_text.setString(m_text_string.str() + "_");
+    m_text.setString(m_text_string + "_");
 }
 
 // public functions:
@@ -158,28 +146,28 @@ void text_box::set_selected(sf::RenderWindow &window)
     if (check_box_selected(window))
     {
         m_selected = true;
-        m_text.setString(m_text_string.str() + "_");
+        m_text.setString(m_text_string + "_");
     }
     else
         m_selected = false;
 
     if (!m_selected)
     {
-        std::string t = m_text_string.str();
+        std::string t = m_text_string;
         m_text.setString(t);
     }
 }
 
 /* If the key was typed it will handle the input */
-void text_box::typed(sf::Event &input)
+void text_box::typed(unsigned int unicode)
 {
     if (m_selected)
     {
-        int typed_char = input.text.unicode;
+        unsigned int typed_char = unicode;
 
-        if ((typed_char > 31 && typed_char < 128) || (typed_char == ESC) || (typed_char == TAB) || (typed_char == ENTER) || (typed_char == BACKSPACE))
+        if ((typed_char > 31 && typed_char < 128) || (typed_char == TAB) || (typed_char == BACKSPACE))
         {
-            if (static_cast<int> (m_text_string.str().length()) <= m_limit || typed_char == BACKSPACE)
+            if (static_cast<int> (m_text_string.length()) < m_limit || typed_char == BACKSPACE)
                 input_handler(typed_char);
         }
     }
@@ -192,7 +180,7 @@ bool text_box::is_selected()
 
 std::string text_box::get_text_string() const
 {
-    return m_text_string.str();
+    return m_text_string;
 }
 
 std::pair<float, float> text_box::get_box_sizes() const
@@ -209,12 +197,20 @@ void text_box::draw(sf::RenderWindow &window)
 void text_box::clear()
 {
     m_text.setString("_");
-    m_text_string.str("_");
+    m_text_string = "";
 }
 
 void text_box::clear_deselect()
 {
     m_text.setString("");
-    m_text_string.str("");
+    m_text_string = "";
     m_selected = false;
+}
+
+bool text_box::is_valid()
+{
+    std::string str = m_text_string;
+    str.erase(std::remove_if(str.begin(), str.end(), [](unsigned char ch) { return std::isspace(ch); }), str.end());
+    
+    return str.length() > 0;
 }

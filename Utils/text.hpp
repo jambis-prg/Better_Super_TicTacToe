@@ -48,12 +48,11 @@ class text_box : public game_text
 {
     private:
         sf::RectangleShape m_box;
-        std::ostringstream m_text_string;
+        std::string m_text_string;
         int m_limit = 15;
         bool m_selected = false;
 
         bool check_box_selected(sf::RenderWindow &window);
-        void delete_last_char();
         void input_handler(int typed_char);
 
     public:
@@ -62,7 +61,7 @@ class text_box : public game_text
         void set_box_position(const sf::Vector2f position);
         void set_selected(sf::RenderWindow &window);
         bool is_selected();
-        void typed(sf::Event &input);
+        void typed(unsigned int unicode);
         
         std::string get_text_string() const;
         std::pair<float, float> get_box_sizes() const;
@@ -70,4 +69,6 @@ class text_box : public game_text
         void draw(sf::RenderWindow &window) override;
         void clear();
         void clear_deselect();
+
+        bool is_valid();
 };

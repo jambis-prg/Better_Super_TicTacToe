@@ -4,5 +4,5 @@
 #include <cstdint>
 
 enum class Status : uint8_t {
-    EMPTY, X, O, TIE
+    X, O, EMPTY, TIE
 };

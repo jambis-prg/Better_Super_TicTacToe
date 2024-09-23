@@ -3,12 +3,12 @@
 #include <locale>
 #include <codecvt>
 
-main_menu::main_menu(sf::RenderWindow &window)
+main_menu::main_menu(sf::Vector2u windowSize)
 {
     m_title.set_text("SUPER TIC TAC TOE", 50);
 
-    float half_x = window.getSize().x / 2.f;
-    float half_y = window.getSize().y / 2.f;
+    float half_x = windowSize.x / 2.f;
+    float half_y = windowSize.y / 2.f;
 
     sf::FloatRect bounds = m_title.get_text().getLocalBounds();
     m_title.set_position({half_x - bounds.width / 2.f, 2 * bounds.height});
@@ -59,10 +59,10 @@ void main_menu::draw(sf::RenderWindow &window)
 }
 
 
-credits_menu::credits_menu(sf::RenderWindow &window)
+credits_menu::credits_menu(sf::Vector2u windowSize)
 {
-    float half_x = window.getSize().x / 2.f;
-    float half_y = window.getSize().y / 2.f;
+    float half_x = windowSize.x / 2.f;
+    float half_y = windowSize.y / 2.f;
 
     m_return_button.set_text("RETURN", 40);
 
@@ -110,10 +110,10 @@ void credits_menu::draw(sf::RenderWindow &window)
 }
 
 
-name_input_menu::name_input_menu(sf::RenderWindow &window)
+name_input_menu::name_input_menu(sf::Vector2u windowSize)
 {
-    float half_x = window.getSize().x / 2.f;
-    float half_y = window.getSize().y / 2.f;
+    float half_x = windowSize.x / 2.f;
+    float half_y = windowSize.y / 2.f;
 
     m_player_name_box.set_text(
         "", 30, 
@@ -124,6 +124,11 @@ name_input_menu::name_input_menu(sf::RenderWindow &window)
 
     m_type_message.set_text("X's Name:", 40);
     m_type_message.set_position({half_x - m_player_name_box.get_box_sizes().first / 1.1f, half_y / 1.275f});
+
+    m_error_message.set_text("< EMPTY NAME > !!!!", 40);
+    sf::FloatRect bounds = m_error_message.get_text().getLocalBounds();
+        
+    m_error_message.set_position({half_x - bounds.width, half_y / 1.5f});
 }
 
 text_box& name_input_menu::get_text_box()
@@ -141,17 +146,24 @@ void name_input_menu::set_type_message(const std::string &s)
     m_type_message.set_text(s, 40);
 }
 
+void name_input_menu::enable_error_message(bool value)
+{
+    m_error_message_enabled = value;
+}
+
 void name_input_menu::draw(sf::RenderWindow &window)
 {
     window.draw(m_type_message.get_text());
     m_player_name_box.draw(window);
+    if(m_error_message_enabled)
+        m_error_message.draw(window);
 }
 
 
-end_screen_menu::end_screen_menu(sf::RenderWindow &window)
+end_screen_menu::end_screen_menu(sf::Vector2u windowSize)
 {
-    float half_x = window.getSize().x / 2.f;
-    float half_y = window.getSize().y / 2.f;
+    float half_x = windowSize.x / 2.f;
+    float half_y = windowSize.y / 2.f;
 
     m_menu_button.set_text("MENU", 40);
     sf::FloatRect bounds = m_menu_button.get_text().getLocalBounds();

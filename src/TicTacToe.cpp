@@ -216,9 +216,9 @@ void TicTacToe::iterate_board(void (TicTacToe::*func) (Square&, sf::RenderWindow
             (this->*func)(s, window);
 }
 
-void TicTacToe::set_players_name(const std::pair<std::string, std::string> &players)
+void TicTacToe::set_players_name(const std::array<std::string, 2> &players_name)
 {
-    m_current_player_text.set_names(players.first, players.second);
+    m_current_player_text.set_names(players_name[0], players_name[1]);
 }
 
 // Getters:

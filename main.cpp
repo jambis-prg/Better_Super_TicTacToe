@@ -2,7 +2,7 @@
 
 int main()
 {
-    std::srand(static_cast<unsigned>(time(NULL)));
+    std::srand(time(NULL));
 
     Game game;
 
